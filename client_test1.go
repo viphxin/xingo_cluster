@@ -33,6 +33,7 @@ func (this *MyPtotoc)OnConnectionMade(fconn iface.Iclient){
 				Content: "哈哈哈哈哈哈哈哈哈哈sdadasdasfas 萨达萨达撒发送的发大声大声",
 			}
 			this.Send(fconn, 0, msg)
+			this.Send(fconn, 10, nil)
 			time.Sleep(1*time.Second)
 		}
 	}()
@@ -98,12 +99,10 @@ func (this *MyPtotoc) Pack(msgId uint32, data proto.Message) (out []byte, err er
 func (this *MyPtotoc)DoMsg(fconn iface.Iclient, pdata *PkgData){
 	//处理消息
 	fmt.Println(fmt.Sprintf("msg id :%d, data len: %d", pdata.MsgId, pdata.Len))
-	if pdata.MsgId == 1{
+	if pdata.MsgId == 1 || pdata.MsgId == 10{
 		bdata := &pb.BroadCast{}
 		proto.Unmarshal(pdata.Data, bdata)
-		if bdata.Tp == 1{
-
-		}
+		println(bdata.GetContent())
 	}
 }
 

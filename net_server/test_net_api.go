@@ -7,6 +7,7 @@ import (
 	"xingo_cluster/pb"
 	"github.com/viphxin/xingo/logger"
 	"github.com/viphxin/xingo/clusterserver"
+	"math/rand"
 )
 
 type TestNetApi struct {
@@ -35,5 +36,34 @@ func (this *TestNetApi)Api_0(request *fnet.PkgAll){
 	} else {
 		logger.Error(err)
 		request.Fconn.LostConnection()
+	}
+}
+
+func (this *TestNetApi)Api_10(request *fnet.PkgAll){
+	//test rpc for result
+	//转发到gate
+	onegate := clusterserver.GlobalClusterServer.RemoteNodesMgr.GetRandomChild("gate")
+
+	if onegate != nil{
+		logger.Info("chose root: " + onegate.GetName())
+		i := rand.Intn(10)
+		ii := rand.Intn(10)
+		response, err := onegate.CallChildForResult("Add", i, ii)
+		if err == nil{
+			pid, _ := request.Fconn.GetProperty("pid")
+			p := GlobalPlayerMgr.GetPlayer(pid.(int32))
+			if p != nil{
+				msg := &pb.BroadCast{
+					Pid : pid.(int32),
+					Tp: 1,
+					Data: &pb.BroadCast_Content{
+						Content: fmt.Sprintf("%d + %d = %f", i, ii, response.Result["sum"].(float64)),
+					},
+				}
+				p.SendMsg(10, msg)
+			}
+		}else{
+			logger.Error(err)
+		}
 	}
 }

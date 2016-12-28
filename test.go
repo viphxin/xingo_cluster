@@ -5,6 +5,8 @@ import (
 	"github.com/viphxin/xingo/cluster"
 	"encoding/json"
 	"fmt"
+	"runtime/debug"
+	"time"
 )
 
 func main() {
@@ -32,5 +34,16 @@ func main() {
 		}else{
 			println(aa.Key, aa.MsgType)
 		}
+	}
+	defer func() {
+		if err := recover(); err != nil {
+			debug.PrintStack()
+			println("panic recover!!!")
+		}
+	}()
+	for {
+		println("sdasdsadas1111111")
+		panic("huangxinsss")
+		time.Sleep(3*time.Second)
 	}
 }

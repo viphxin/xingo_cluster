@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"xingo_cluster/net_server"
 	"xingo_cluster/gate_server"
+	"xingo_cluster/admin_server"
 )
 
 func main() {
@@ -21,7 +22,10 @@ func main() {
 		*/
 		//net server
 		s.AddModule("net", &net_server.TestNetApi{}, &net_server.TestNetRpc{})
+		//gate server
 		s.AddModule("gate", nil, &gate_server.TestGateRpc{})
+		//admin server
+		s.AddModule("admin", &admin_server.TestAdminHttp{}, nil)
 
 		s.StartClusterServer()
 	}
