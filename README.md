@@ -1,6 +1,6 @@
 # xingo_cluster
-xingo cluster 分布式集群 示例代码
-示例配置:
+xingo cluster 分布式集群 示例代码<br>
+示例配置:<br>
 ```json
 {
 "master":{"host": "192.168.2.225","rootport":9999},
@@ -16,5 +16,5 @@ xingo cluster 分布式集群 示例代码
 }
 }
 ```
-架构图：
+架构图：<br>
 ![alt text](https://github.com/viphxin/xingo_cluster/blob/master/conf/xingo_cluster_架构.png)
