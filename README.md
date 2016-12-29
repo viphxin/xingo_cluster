@@ -17,4 +17,4 @@ xingo cluster 分布式集群 示例代码<br>
 }
 ```
 架构图：<br>
-![alt text](https://github.com/viphxin/xingo_cluster/blob/master/conf/xingo_cluster_架构.png)
+![alt text](conf/xingo_cluster_架构.png)
