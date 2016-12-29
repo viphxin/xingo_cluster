@@ -34,7 +34,7 @@ func (this *MyPtotoc)OnConnectionMade(fconn iface.Iclient){
 			}
 			this.Send(fconn, 0, msg)
 			this.Send(fconn, 10, nil)
-			time.Sleep(1*time.Second)
+			time.Sleep(100*time.Millisecond)
 		}
 	}()
 }
@@ -150,7 +150,7 @@ func (this *MyPtotoc)AddRpcRouter(router interface{}){
 }
 
 func main() {
-	for i := 0; i< 10000; i ++{
+	for i := 0; i< 1; i ++{
 		client := fnet.NewTcpClient("0.0.0.0", 11009, &MyPtotoc{})
 		client.Start()
 		time.Sleep(100*time.Millisecond)
