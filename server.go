@@ -8,9 +8,17 @@ import (
 	"xingo_cluster/net_server"
 	"xingo_cluster/gate_server"
 	"xingo_cluster/admin_server"
+        _ "net/http"
+	_ "net/http/pprof"
 )
 
 func main() {
+	//pprof
+	//go func() {
+	//	println(http.ListenAndServe("localhost:6060", nil))
+	//}()
+
+	//server code
 	args := os.Args
 	dir, err := filepath.Abs(filepath.Dir("."))
 	if err == nil{

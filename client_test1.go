@@ -153,7 +153,7 @@ func main() {
 	for i := 0; i< 10000; i ++{
 		client := fnet.NewTcpClient("0.0.0.0", 11009, &MyPtotoc{})
 		client.Start()
-		time.Sleep(1*time.Second)
+		time.Sleep(100*time.Millisecond)
 	}
 
 	// close
