@@ -1,5 +1,19 @@
 # xingo_cluster
 xingo cluster 分布式集群 示例代码<br>
+```json
+启动服务器集群：
+go run master.go
+go run server.go net1
+go run server.go net2
+go run server.go gate1
+go run server.go gate2
+go run server.go gate3
+go run server.go gate4
+go run server.go admin
+
+启动测试脚本:
+go run client_test1.go
+```
 示例配置:<br>
 ```json
 {
