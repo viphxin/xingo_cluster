@@ -12,6 +12,7 @@ import (
 	"os/signal"
 	"github.com/viphxin/xingo/fnet"
 	"github.com/viphxin/xingo/iface"
+	"math/rand"
 )
 
 type PkgData struct {
@@ -34,7 +35,7 @@ func (this *MyPtotoc)OnConnectionMade(fconn iface.Iclient){
 			}
 			this.Send(fconn, 0, msg)
 			this.Send(fconn, 10, nil)
-			time.Sleep(100*time.Millisecond)
+			time.Sleep(2000*time.Millisecond)
 		}
 	}()
 }
@@ -150,8 +151,9 @@ func (this *MyPtotoc)AddRpcRouter(router interface{}){
 }
 
 func main() {
-	for i := 0; i< 1; i ++{
-		client := fnet.NewTcpClient("0.0.0.0", 11009, &MyPtotoc{})
+	nets := []int{11009, 11010, 11011, 11012}
+	for i := 0; i< 10000; i ++{
+		client := fnet.NewTcpClient("0.0.0.0", nets[rand.Intn(len(nets))], &MyPtotoc{})
 		client.Start()
 		time.Sleep(100*time.Millisecond)
 	}

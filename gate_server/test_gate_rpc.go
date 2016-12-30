@@ -17,9 +17,12 @@ func (this *TestGateRpc)Proxy2Game(request *cluster.RpcRequest){
 	pid := int32((request.Rpcdata.Args[0]).(float64))
 	message := (request.Rpcdata.Args[1]).(string)
 	logger.Info(pid, message)
-	onenet := clusterserver.GlobalClusterServer.ChildsMgr.GetRandomChild("net")
-	if onenet != nil{
-		onenet.CallChildNotForResult("PushMsg2Client", pid, message)
+	//onenet := clusterserver.GlobalClusterServer.ChildsMgr.GetRandomChild("net")
+	//if onenet != nil{
+	//	onenet.CallChildNotForResult("PushMsg2Client", pid, message)
+	//}
+	for _, child := range clusterserver.GlobalClusterServer.ChildsMgr.GetChilds(){
+		child.CallChildNotForResult("PushMsg2Client", pid, message)
 	}
 }
 
