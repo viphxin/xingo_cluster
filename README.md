@@ -1,4 +1,5 @@
 # xingo_cluster
+xingo地址：(https://git.oschina.net/viphxin/xingo)<br>
 xingo cluster 分布式集群 示例代码<br>
 ```json
 启动服务器集群：
