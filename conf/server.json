@@ -3,8 +3,8 @@
 	"StepPerMs": 2000,
 	"PoolSize": 5,
 	"IsUsePool": true,
-	"LogLevel": 4,
+	"LogLevel": 1,
 	"MaxConn": 20000,
-	"LogPath": "/home/huangxin/workspace/go_fighting/src/xingo_cluster/log",
+	"LogPath": "log/.",
 	"LogName": "cluster.log"
 }

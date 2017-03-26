@@ -1,18 +1,18 @@
 package main
 
 import (
+	"bytes"
+	"encoding/binary"
 	"fmt"
 	"github.com/golang/protobuf/proto"
-	"encoding/binary"
-	"bytes"
-	"time"
-	"io"
-	"xingo_demo/pb"
-	"os"
-	"os/signal"
 	"github.com/viphxin/xingo/fnet"
 	"github.com/viphxin/xingo/iface"
+	"io"
 	"math/rand"
+	"os"
+	"os/signal"
+	"time"
+	"xingo_demo/pb"
 )
 
 type PkgData struct {
@@ -21,26 +21,25 @@ type PkgData struct {
 	Data  []byte
 }
 
-
-type MyPtotoc struct{
+type MyPtotoc struct {
 	Pid int32
 }
 
-func (this *MyPtotoc)OnConnectionMade(fconn iface.Iclient){
+func (this *MyPtotoc) OnConnectionMade(fconn iface.Iclient) {
 	fmt.Println("链接建立")
 	go func() {
-		for{
+		for {
 			msg := &pb.Talk{
 				Content: "哈哈哈哈哈哈哈哈哈哈sdadasdasfas 萨达萨达撒发送的发大声大声",
 			}
 			this.Send(fconn, 0, msg)
 			this.Send(fconn, 10, nil)
-			time.Sleep(2000*time.Millisecond)
+			time.Sleep(2000 * time.Millisecond)
 		}
 	}()
 }
 
-func (this *MyPtotoc)OnConnectionLost(fconn iface.Iclient){
+func (this *MyPtotoc) OnConnectionLost(fconn iface.Iclient) {
 	fmt.Println("链接丢失")
 }
 
@@ -97,65 +96,73 @@ func (this *MyPtotoc) Pack(msgId uint32, data proto.Message) (out []byte, err er
 
 }
 
-func (this *MyPtotoc)DoMsg(fconn iface.Iclient, pdata *PkgData){
+func (this *MyPtotoc) DoMsg(fconn iface.Iclient, pdata *PkgData) {
 	//处理消息
 	fmt.Println(fmt.Sprintf("msg id :%d, data len: %d", pdata.MsgId, pdata.Len))
-	if pdata.MsgId == 1 || pdata.MsgId == 10{
+	if pdata.MsgId == 1 || pdata.MsgId == 10 {
 		bdata := &pb.BroadCast{}
 		proto.Unmarshal(pdata.Data, bdata)
 		println(bdata.GetContent())
 	}
 }
 
-func (this *MyPtotoc)Send(fconn iface.Iclient, msgID uint32, data proto.Message){
+func (this *MyPtotoc) Send(fconn iface.Iclient, msgID uint32, data proto.Message) {
 	dd, err := this.Pack(msgID, data)
-	if err == nil{
+	if err == nil {
 		fconn.Send(dd)
-	}else{
+	} else {
 		fmt.Println(err)
 	}
 
 }
 
-func (this *MyPtotoc)StartReadThread(fconn iface.Iclient){
+func (this *MyPtotoc) StartReadThread(fconn iface.Iclient) {
 	go func() {
 		for {
-		//read per head data
-		headdata := make([]byte, 8)
+			//read per head data
+			headdata := make([]byte, 8)
 
-		if _, err := io.ReadFull(fconn.GetConnection(), headdata); err != nil {
-			fmt.Println(err)
-			this.OnConnectionLost(fconn)
-			return
-		}
-		pkgHead, err := this.Unpack(headdata)
-		if err != nil {
-			this.OnConnectionLost(fconn)
-			return
-		}
-		//data
-		if pkgHead.Len > 0 {
-			pkgHead.Data = make([]byte, pkgHead.Len)
-			if _, err := io.ReadFull(fconn.GetConnection(), pkgHead.Data); err != nil {
+			if _, err := io.ReadFull(fconn.GetConnection(), headdata); err != nil {
+				fmt.Println(err)
 				this.OnConnectionLost(fconn)
 				return
 			}
+			pkgHead, err := this.Unpack(headdata)
+			if err != nil {
+				this.OnConnectionLost(fconn)
+				return
+			}
+			//data
+			if pkgHead.Len > 0 {
+				pkgHead.Data = make([]byte, pkgHead.Len)
+				if _, err := io.ReadFull(fconn.GetConnection(), pkgHead.Data); err != nil {
+					this.OnConnectionLost(fconn)
+					return
+				}
+			}
+			this.DoMsg(fconn, pkgHead)
 		}
-		this.DoMsg(fconn, pkgHead)
-	}
 	}()
 }
 
-func (this *MyPtotoc)AddRpcRouter(router interface{}){
+func (this *MyPtotoc) AddRpcRouter(router interface{}) {
 
 }
 
+func (this *MyPtotoc) GetMsgHandle() iface.Imsghandle {
+	return nil
+}
+
+func (this *MyPtotoc) GetDataPack() iface.Idatapack {
+	return nil
+}
+
 func main() {
-	nets := []int{11009, 11010, 11011, 11012}
-	for i := 0; i< 10000; i ++{
+	nets := []int{11009}
+	for i := 0; i < 100; i++ {
 		client := fnet.NewTcpClient("0.0.0.0", nets[rand.Intn(len(nets))], &MyPtotoc{})
 		client.Start()
-		time.Sleep(100*time.Millisecond)
+		time.Sleep(100 * time.Millisecond)
 	}
 
 	// close
