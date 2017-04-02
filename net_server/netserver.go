@@ -22,15 +22,9 @@ func DoConnectionLost(fconn iface.Iconnection) {
 
 }
 
-func testGSTimer(args ...interface{}) {
-	logger.Info("timer call: ", args[0], "========", args[1])
-	utils.GlobalObject.GsTimeScheduel.CreateTimer(3000, testGSTimer, []interface{}{111, 222})
-}
-
 var GlobalPlayerMgr *core.PlayerMgr = core.NewPlayerMgr()
 
 func init() {
 	utils.GlobalObject.OnConnectioned = DoConnectionMade
 	utils.GlobalObject.OnClosed = DoConnectionLost
-	utils.GlobalObject.GsTimeScheduel.CreateTimer(3000, testGSTimer, []interface{}{111, 222})
 }
