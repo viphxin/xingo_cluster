@@ -163,7 +163,7 @@ func (this *MyPtotoc) InitWorker(int32) {
 
 func main() {
 	nets := []int{11009}
-	for i := 0; i < 5000; i++ {
+	for i := 0; i < 1000; i++ {
 		client := fnet.NewTcpClient("127.0.0.1", nets[rand.Intn(len(nets))], &MyPtotoc{})
 		client.Start()
 		time.Sleep(100 * time.Millisecond)
