@@ -157,10 +157,14 @@ func (this *MyPtotoc) GetDataPack() iface.Idatapack {
 	return nil
 }
 
+func (this *MyPtotoc) InitWorker(int32) {
+
+}
+
 func main() {
 	nets := []int{11009}
-	for i := 0; i < 100; i++ {
-		client := fnet.NewTcpClient("0.0.0.0", nets[rand.Intn(len(nets))], &MyPtotoc{})
+	for i := 0; i < 5000; i++ {
+		client := fnet.NewTcpClient("127.0.0.1", nets[rand.Intn(len(nets))], &MyPtotoc{})
 		client.Start()
 		time.Sleep(100 * time.Millisecond)
 	}
