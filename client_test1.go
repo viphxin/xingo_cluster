@@ -34,6 +34,7 @@ func (this *MyPtotoc) OnConnectionMade(fconn iface.Iclient) {
 			}
 			this.Send(fconn, 0, msg)
 			this.Send(fconn, 10, nil)
+			this.Send(fconn, 11, nil)
 			time.Sleep(2000 * time.Millisecond)
 		}
 	}()
@@ -163,7 +164,7 @@ func (this *MyPtotoc) InitWorker(int32) {
 
 func main() {
 	nets := []int{11009}
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 1; i++ {
 		client := fnet.NewTcpClient("127.0.0.1", nets[rand.Intn(len(nets))], &MyPtotoc{})
 		client.Start()
 		time.Sleep(100 * time.Millisecond)

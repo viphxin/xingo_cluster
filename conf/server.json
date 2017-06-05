@@ -5,6 +5,6 @@
 	"IsUsePool": true,
 	"LogLevel": 1,
 	"MaxConn": 20000,
-	"LogPath": "log/.",
+	"LogPath": "/Users/huangxin/workspace/src/xingo_cluster/log",
 	"LogName": "cluster.log"
 }

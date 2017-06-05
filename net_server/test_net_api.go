@@ -67,3 +67,15 @@ func (this *TestNetApi)Api_10(request *fnet.PkgAll){
 		}
 	}
 }
+
+func (this *TestNetApi)Api_11(request *fnet.PkgAll){
+	//test rpc for result
+	//转发到gate
+	onegate := clusterserver.GlobalClusterServer.RemoteNodesMgr.GetRandomChild("gate")
+
+	if onegate != nil{
+		pid, _ := request.Fconn.GetProperty("pid")
+		onegate.CallChildNotForResult("GetGSTime", pid)
+
+	}
+}

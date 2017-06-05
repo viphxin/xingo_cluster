@@ -33,7 +33,7 @@ func main() {
 		//gate server
 		s.AddModule("gate", nil, &gate_server.TestGateRpc{})
 		//admin server
-		s.AddModule("admin", &admin_server.TestAdminHttp{}, nil)
+		s.AddModule("admin", &admin_server.TestAdminHttp{}, &admin_server.TestAdminRpc{})
 
 		s.StartClusterServer()
 	}
