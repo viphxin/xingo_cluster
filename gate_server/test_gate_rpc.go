@@ -36,3 +36,13 @@ func (this *TestGateRpc)Add(request *cluster.RpcRequest) map[string]interface{}{
 		"sum": i + ii,
 	}
 }
+
+func (this *TestGateRpc)GetGSTime(request *cluster.RpcRequest){
+	//Json反序列化数字到interface{}类型的值中，默认解析为float64类型，在使用时要注意
+	pid := int32((request.Rpcdata.Args[0]).(float64))
+	onenet := clusterserver.GlobalClusterServer.ChildsMgr.GetRandomChild("admin")
+	logger.Info(onenet)
+	if onenet != nil{
+		onenet.CallChildNotForResult("GetGSTime", pid)
+	}
+}
