@@ -10,6 +10,7 @@ import (
 	"xingo_cluster/admin_server"
         _ "net/http"
 	_ "net/http/pprof"
+	"github.com/viphxin/xingo"
 )
 
 func main() {
@@ -22,9 +23,7 @@ func main() {
 	args := os.Args
 	dir, err := filepath.Abs(filepath.Dir("."))
 	if err == nil{
-		s := clusterserver.NewClusterServer(args[1], filepath.Join(dir, "conf", "clusterconf.json"))
-		s.AddRpcRouter(&sys_rpc.ChildRpc{})
-		s.AddRpcRouter(&sys_rpc.RootRpc{})
+		s := xingo.NewXingoCluterServer(args[1], filepath.Join(dir, "conf", "clusterconf.json"))
 		/*
 		注册分布式服务器
 		*/

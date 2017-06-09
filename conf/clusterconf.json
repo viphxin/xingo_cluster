@@ -1,9 +1,9 @@
 {
-"master":{"host": "127.0.0.1","rootport":9999},
+"master":{"host": "127.0.0.1","rootport":9999, "debugport":8881},
 "servers":{
 "gate1":{"host": "127.0.0.1", "rootport":10000,"name":"gate1", "module": "gate", "log": "gate.log"},
 "gate2":{"host": "127.0.0.1", "rootport":10001,"name":"gate2", "module": "gate", "log": "gate.log"},
-"net1":{"host": "127.0.0.1", "netport":11009,"name":"net1","remotes":["gate1", "gate2"], "module": "net", "log": "net.log"},
+"net1":{"host": "127.0.0.1", "netport":11009,"debugport":11007, "name":"net1","remotes":["gate1", "gate2"], "module": "net", "log": "net.log"},
 "net2":{"host": "127.0.0.1", "netport":11010,"name":"net2","remotes":["gate1", "gate2"], "module": "net", "log": "net.log"},
 "net3":{"host": "127.0.0.1", "netport":11011,"name":"net3","remotes":["gate1", "gate2"], "module": "net", "log": "net.log"},
 "net4":{"host": "127.0.0.1", "netport":11012,"name":"net4","remotes":["gate1", "gate2"], "module": "net", "log": "net.log"},
