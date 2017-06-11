@@ -10,23 +10,23 @@ import (
 	"math/rand"
 )
 
-type TestNetApi struct {
+type TestNetApi2 struct {
 
 }
 
-func (this *TestNetApi)Api_0(request *fnet.PkgAll){
+func (this *TestNetApi2)Api_0(request *fnet.PkgAll){
 	msg := &pb.Talk{}
 	err := proto.Unmarshal(request.Pdata.Data, msg)
 	if err == nil {
 		logger.Debug(fmt.Sprintf("user talk: content: %s.", msg.Content))
 		pid, err1 := request.Fconn.GetProperty("pid")
 		if err1 == nil{
-			//转发到gate
-			onegate := clusterserver.GlobalClusterServer.RemoteNodesMgr.GetRandomChild("gate")
+			//转发到game
+			onegame := clusterserver.GlobalClusterServer.ChildsMgr.GetRandomChild("game")
 
-			if onegate != nil{
-				logger.Debug("chose root: " + onegate.GetName())
-				onegate.CallChildNotForResult("Proxy2Game", pid.(int32), msg.Content)
+			if onegame != nil{
+				logger.Debug("chose root: " + onegame.GetName())
+				onegame.CallChildNotForResult("Proxy2Game", pid.(int32), msg.Content)
 			}
 		}else{
 			logger.Error(err1)
@@ -39,16 +39,16 @@ func (this *TestNetApi)Api_0(request *fnet.PkgAll){
 	}
 }
 
-func (this *TestNetApi)Api_10(request *fnet.PkgAll){
+func (this *TestNetApi2)Api_10(request *fnet.PkgAll){
 	//test rpc for result
 	//转发到gate
-	onegate := clusterserver.GlobalClusterServer.RemoteNodesMgr.GetRandomChild("gate")
+	onegame := clusterserver.GlobalClusterServer.ChildsMgr.GetRandomChild("game")
 
-	if onegate != nil{
-		logger.Debug("chose root: " + onegate.GetName())
+	if onegame != nil{
+		logger.Debug("chose child: " + onegame.GetName())
 		i := rand.Intn(10)
 		ii := rand.Intn(10)
-		response, err := onegate.CallChildForResult("Add", i, ii)
+		response, err := onegame.CallChildForResult("Add", i, ii)
 		if err == nil{
 			pid, _ := request.Fconn.GetProperty("pid")
 			p := GlobalPlayerMgr.GetPlayer(pid.(int32))
@@ -68,14 +68,14 @@ func (this *TestNetApi)Api_10(request *fnet.PkgAll){
 	}
 }
 
-func (this *TestNetApi)Api_11(request *fnet.PkgAll){
+func (this *TestNetApi2)Api_11(request *fnet.PkgAll){
 	//test rpc for result
 	//转发到gate
-	onegate := clusterserver.GlobalClusterServer.RemoteNodesMgr.GetRandomChild("gate")
+	onegame := clusterserver.GlobalClusterServer.ChildsMgr.GetRandomChild("game")
 
-	if onegate != nil{
+	if onegame != nil{
 		pid, _ := request.Fconn.GetProperty("pid")
-		onegate.CallChildNotForResult("GetGSTime", pid)
+		onegame.CallChildNotForResult("GetGSTime", pid)
 
 	}
 }

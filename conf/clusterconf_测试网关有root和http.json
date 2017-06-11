@@ -1,0 +1,8 @@
+{
+"master":{"host": "127.0.0.1","rootport":9999, "debugport":8881, "writelist": ["127.0.0.1"]},
+"servers":{
+"net1":{"host": "127.0.0.1", "netport":11009, "rootport":11109, "http": [11209, "/static"], "debugport":11007, "name":"net1", "module": "net", "log": "net.log"},
+"net2":{"host": "127.0.0.1", "netport":11010, "rootport":11110, "http": [11210, "/static"], "name":"net2", "module": "net", "log": "net.log"},
+"game1":{"host": "127.0.0.1", "remotes":["net1", "net2"], "name":"game1", "module": "game"}
+}
+}

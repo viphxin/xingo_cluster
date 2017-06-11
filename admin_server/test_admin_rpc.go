@@ -16,7 +16,7 @@ func (this *TestAdminRpc)GetGSTime(request *cluster.RpcRequest){
 	onegate := clusterserver.GlobalClusterServer.RemoteNodesMgr.GetRandomChild("gate")
 
 	if onegate != nil{
-		logger.Info("chose root: " + onegate.GetName())
+		logger.Debug("chose root: " + onegate.GetName())
 		onegate.CallChildNotForResult("Proxy2Game", pid, "2222.3333")
 	}
 }

@@ -1,5 +1,5 @@
 {
-"master":{"host": "127.0.0.1","rootport":9999, "debugport":8881},
+"master":{"host": "127.0.0.1","rootport":9999, "debugport":8881, "writelist": ["127.0.0.1"]},
 "servers":{
 "gate1":{"host": "127.0.0.1", "rootport":10000,"name":"gate1", "module": "gate", "log": "gate.log"},
 "gate2":{"host": "127.0.0.1", "rootport":10001,"name":"gate2", "module": "gate", "log": "gate.log"},
@@ -7,7 +7,7 @@
 "net2":{"host": "127.0.0.1", "netport":11010,"name":"net2","remotes":["gate1", "gate2"], "module": "net", "log": "net.log"},
 "net3":{"host": "127.0.0.1", "netport":11011,"name":"net3","remotes":["gate1", "gate2"], "module": "net", "log": "net.log"},
 "net4":{"host": "127.0.0.1", "netport":11012,"name":"net4","remotes":["gate1", "gate2"], "module": "net", "log": "net.log"},
-"admin1":{"host": "127.0.0.1", "remotes":["gate2", "gate1"], "name":"admin", "module": "admin", "http": [8888, "/static"]},
+"admin1":{"host": "127.0.0.1", "remotes":["gate2", "gate1"], "name":"admin1", "module": "admin", "http": [8888, "/static"]},
 "game1":{"host": "127.0.0.1", "remotes":["gate2", "gate1"], "name":"game1", "module": "game"}
 }
 }

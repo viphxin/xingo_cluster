@@ -1,9 +1,8 @@
 {
 	"TcpPort": 8999,
 	"StepPerMs": 2000,
-	"PoolSize": 5,
-	"IsUsePool": true,
-	"LogLevel": 1,
+	"PoolSize": 1,
+	"LogLevel": 2,
 	"MaxConn": 20000,
 	"LogPath": "/Users/huangxin/workspace/src/xingo_cluster/log",
 	"LogName": "cluster.log"
