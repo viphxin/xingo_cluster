@@ -7,16 +7,19 @@ import (
 	"github.com/viphxin/xingo/clusterserver"
 	"fmt"
 	"strings"
+	"github.com/viphxin/xingo/iface"
 )
 
-type TestGateRpc struct {
-
+type Proxy2GameRouter struct {
+	cluster.BaseRpcRouter
 }
 
-func (this *TestGateRpc)Proxy2Game(request *cluster.RpcRequest){
+func (this *Proxy2GameRouter)Handle(request iface.IRpcRequest){
 	//Json反序列化数字到interface{}类型的值中，默认解析为float64类型，在使用时要注意
-	pid := int32((request.Rpcdata.Args[0]).(float64))
-	message := (request.Rpcdata.Args[1]).(string)
+	//pid := int32((request.GetArgs()[0]).(float64))
+	//gob序列化没问题
+	pid := (request.GetArgs()[0]).(int32)
+	message := (request.GetArgs()[1]).(string)
 	logger.Debug(pid, message)
 	//onenet := clusterserver.GlobalClusterServer.ChildsMgr.GetRandomChild("net")
 	//if onenet != nil{
@@ -29,20 +32,25 @@ func (this *TestGateRpc)Proxy2Game(request *cluster.RpcRequest){
 	}
 }
 
-func (this *TestGateRpc)Add(request *cluster.RpcRequest) map[string]interface{}{
-	//Json反序列化数字到interface{}类型的值中，默认解析为float64类型，在使用时要注意
-	i := int32((request.Rpcdata.Args[0]).(float64))
-	ii := int32((request.Rpcdata.Args[1]).(float64))
-
-	logger.Debug(fmt.Sprintf("%d + %d = %d", i, ii, i + ii))
-	return map[string]interface{}{
-		"sum": i + ii,
-	}
+type AddRouter struct {
+	cluster.BaseRpcRouter
 }
 
-func (this *TestGateRpc)GetGSTime(request *cluster.RpcRequest){
+func (this *AddRouter)Handle(request iface.IRpcRequest){
 	//Json反序列化数字到interface{}类型的值中，默认解析为float64类型，在使用时要注意
-	pid := int32((request.Rpcdata.Args[0]).(float64))
+	i := (request.GetArgs()[0]).(int)
+	ii := (request.GetArgs()[1]).(int)
+
+	logger.Debug(fmt.Sprintf("%d + %d = %d", i, ii, i + ii))
+	request.PushReturn("sum", i + ii)
+}
+
+type GetGSTimeRouter struct {
+	cluster.BaseRpcRouter
+}
+func (this *GetGSTimeRouter)Handle(request iface.IRpcRequest){
+	//Json反序列化数字到interface{}类型的值中，默认解析为float64类型，在使用时要注意
+	pid := (request.GetArgs()[0]).(int32)
 	onenet := clusterserver.GlobalClusterServer.ChildsMgr.GetRandomChild("admin")
 	logger.Debug(onenet)
 	if onenet != nil{

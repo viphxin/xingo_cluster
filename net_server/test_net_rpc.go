@@ -3,15 +3,16 @@ package net_server
 import (
 	"github.com/viphxin/xingo/cluster"
 	"xingo_cluster/pb"
+	"github.com/viphxin/xingo/iface"
 )
 
-type TestNetRpc struct {
-
+type PushMsg2ClientRouter struct {
+	cluster.BaseRpcRouter
 }
 
-func (this *TestNetRpc)PushMsg2Client(request *cluster.RpcRequest){
-	pid := int32(request.Rpcdata.Args[0].(float64))
-	message := request.Rpcdata.Args[1].(string)
+func (this *PushMsg2ClientRouter)Handle(request iface.IRpcRequest){
+	pid := (request.GetArgs()[0]).(int32)
+	message := request.GetArgs()[1].(string)
 	p := GlobalPlayerMgr.GetPlayer(pid)
 	if p != nil{
 		msg := &pb.BroadCast{

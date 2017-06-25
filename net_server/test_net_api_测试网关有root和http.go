@@ -8,18 +8,19 @@ import (
 	"github.com/viphxin/xingo/logger"
 	"github.com/viphxin/xingo/clusterserver"
 	"math/rand"
+	"github.com/viphxin/xingo/iface"
 )
 
-type TestNetApi2 struct {
-
+type Api0Router测试网关有root和http struct {
+	fnet.BaseRouter
 }
 
-func (this *TestNetApi2)Api_0(request *fnet.PkgAll){
+func (this *Api0Router测试网关有root和http)Handle(request iface.IRequest){
 	msg := &pb.Talk{}
-	err := proto.Unmarshal(request.Pdata.Data, msg)
+	err := proto.Unmarshal(request.GetData(), msg)
 	if err == nil {
 		logger.Debug(fmt.Sprintf("user talk: content: %s.", msg.Content))
-		pid, err1 := request.Fconn.GetProperty("pid")
+		pid, err1 := request.GetConnection().GetProperty("pid")
 		if err1 == nil{
 			//转发到game
 			onegame := clusterserver.GlobalClusterServer.ChildsMgr.GetRandomChild("game")
@@ -30,16 +31,20 @@ func (this *TestNetApi2)Api_0(request *fnet.PkgAll){
 			}
 		}else{
 			logger.Error(err1)
-			request.Fconn.LostConnection()
+			request.GetConnection().LostConnection()
 		}
 
 	} else {
 		logger.Error(err)
-		request.Fconn.LostConnection()
+		request.GetConnection().LostConnection()
 	}
 }
 
-func (this *TestNetApi2)Api_10(request *fnet.PkgAll){
+type Api10Router测试网关有root和http struct {
+	fnet.BaseRouter
+}
+
+func (this *Api10Router测试网关有root和http)Handle(request iface.IRequest){
 	//test rpc for result
 	//转发到gate
 	onegame := clusterserver.GlobalClusterServer.ChildsMgr.GetRandomChild("game")
@@ -50,7 +55,7 @@ func (this *TestNetApi2)Api_10(request *fnet.PkgAll){
 		ii := rand.Intn(10)
 		response, err := onegame.CallChildForResult("Add", i, ii)
 		if err == nil{
-			pid, _ := request.Fconn.GetProperty("pid")
+			pid, _ := request.GetConnection().GetProperty("pid")
 			p := GlobalPlayerMgr.GetPlayer(pid.(int32))
 			if p != nil{
 				msg := &pb.BroadCast{
@@ -68,13 +73,17 @@ func (this *TestNetApi2)Api_10(request *fnet.PkgAll){
 	}
 }
 
-func (this *TestNetApi2)Api_11(request *fnet.PkgAll){
+type Api11Router测试网关有root和http struct {
+	fnet.BaseRouter
+}
+
+func (this *Api11Router测试网关有root和http)Handle(request iface.IRequest){
 	//test rpc for result
 	//转发到gate
 	onegame := clusterserver.GlobalClusterServer.ChildsMgr.GetRandomChild("game")
 
 	if onegame != nil{
-		pid, _ := request.Fconn.GetProperty("pid")
+		pid, _ := request.GetConnection().GetProperty("pid")
 		onegame.CallChildNotForResult("GetGSTime", pid)
 
 	}

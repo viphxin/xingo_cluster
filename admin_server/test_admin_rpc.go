@@ -4,14 +4,15 @@ import (
 	"github.com/viphxin/xingo/clusterserver"
 	"github.com/viphxin/xingo/cluster"
 	"github.com/viphxin/xingo/logger"
+	"github.com/viphxin/xingo/iface"
 )
 
-type TestAdminRpc struct {
-
+type GetGSTimeRouter struct {
+	cluster.BaseRpcRouter
 }
 
-func (this *TestAdminRpc)GetGSTime(request *cluster.RpcRequest){
-	pid := (request.Rpcdata.Args[0]).(float64)
+func (this *GetGSTimeRouter)Handle(request iface.IRpcRequest){
+	pid := (request.GetArgs()[0]).(int32)
 	//转发到gate
 	onegate := clusterserver.GlobalClusterServer.RemoteNodesMgr.GetRandomChild("gate")
 

@@ -10,6 +10,7 @@ import (
 	_ "net/http/pprof"
 	"github.com/viphxin/xingo"
 	"xingo_cluster/game_server"
+	"strings"
 )
 
 func main() {
@@ -27,23 +28,38 @@ func main() {
 			/*
 			注册分布式服务器
 			*/
-			//net server
-			s.AddModule("net", &net_server.TestNetApi{}, nil, &net_server.TestNetRpc{})
-			//gate server
-			s.AddModule("gate", nil, nil, &gate_server.TestGateRpc{})
-			//admin server
-			s.AddModule("admin", nil, &admin_server.TestAdminHttp{}, &admin_server.TestAdminRpc{})
-
+			if strings.Contains(args[1], "net") {
+				s.AddRouter("0", &net_server.Api0Router{})
+				s.AddRouter("10", &net_server.Api10Router{})
+				s.AddRouter("11", &net_server.Api11Router{})
+				s.AddRpcRouter("PushMsg2Client", &net_server.PushMsg2ClientRouter{})
+				s.AddHttpRouter("/hello", &net_server.HelloHttpRouter{})
+			}
+			if strings.Contains(args[1], "gate") {
+				s.AddRpcRouter("Proxy2Game", &gate_server.Proxy2GameRouter{})
+				s.AddRpcRouter("Add", &gate_server.AddRouter{})
+				s.AddRpcRouter("GetGSTime", &gate_server.GetGSTimeRouter{})
+			}
+			if strings.Contains(args[1], "admin") {
+				s.AddHttpRouter("/hello", &admin_server.HelloHttpRouter{})
+				s.AddRpcRouter("GetGSTime", &admin_server.GetGSTimeRouter{})
+			}
 			s.StartClusterServer()
 		}else{
 			s := xingo.NewXingoCluterServer(args[1], filepath.Join(dir, "conf", "clusterconf_测试网关有root和http.json"))
 			/*
 			注册分布式服务器
 			*/
-			//net server
-			s.AddModule("net", &net_server.TestNetApi2{}, &net_server.TestNetHttp{}, &net_server.TestNetRpc{})
-			//game server
-			s.AddModule("game", nil, nil, &game_server.TestGameRpc{})
+			if strings.Contains(args[1], "net") {
+				s.AddRouter("0", &net_server.Api0Router测试网关有root和http{})
+				s.AddRouter("10", &net_server.Api10Router测试网关有root和http{})
+				s.AddRouter("11", &net_server.Api11Router测试网关有root和http{})
+				s.AddRpcRouter("PushMsg2Client", &net_server.PushMsg2ClientRouter{})
+			}
+			if strings.Contains(args[1], "game") {
+				s.AddRpcRouter("Add", &game_server.AddRouter{})
+				s.AddRpcRouter("Proxy2Game", &game_server.Proxy2GameRouter{})
+			}
 
 			s.StartClusterServer()
 		}

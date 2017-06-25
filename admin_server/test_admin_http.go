@@ -5,13 +5,14 @@ import (
 	"github.com/viphxin/xingo/logger"
 	"strings"
 	"time"
+	"github.com/viphxin/xingo/fnet"
 )
 
-type TestAdminHttp struct {
-
+type HelloHttpRouter struct {
+	fnet.BaseHttpRouter
 }
 
-func (this *TestAdminHttp)Hello(w http.ResponseWriter, r *http.Request) {
+func (this *HelloHttpRouter)Handle(w http.ResponseWriter, r *http.Request) {
 	logger.Info(strings.Repeat("hello", 10))
 	time.Sleep(3*time.Second)
 	w.Write([]byte("hudfasdkasfas"))
