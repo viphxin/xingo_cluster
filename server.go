@@ -32,6 +32,7 @@ func main() {
 				s.AddRouter("0", &net_server.Api0Router{})
 				s.AddRouter("10", &net_server.Api10Router{})
 				s.AddRouter("11", &net_server.Api11Router{})
+				s.AddRouter("12", &net_server.Api12Router{})
 				s.AddRpcRouter("PushMsg2Client", &net_server.PushMsg2ClientRouter{})
 				s.AddHttpRouter("/hello", &net_server.HelloHttpRouter{})
 			}
@@ -39,6 +40,7 @@ func main() {
 				s.AddRpcRouter("Proxy2Game", &gate_server.Proxy2GameRouter{})
 				s.AddRpcRouter("Add", &gate_server.AddRouter{})
 				s.AddRpcRouter("GetGSTime", &gate_server.GetGSTimeRouter{})
+				s.AddRpcRouter("BytesCalc", &gate_server.BytesCalcRouter{})
 			}
 			if strings.Contains(args[1], "admin") {
 				s.AddHttpRouter("/hello", &admin_server.HelloHttpRouter{})

@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"strings"
 	"github.com/viphxin/xingo/iface"
+	"xingo_cluster/pb"
+	"github.com/golang/protobuf/proto"
 )
 
 type Proxy2GameRouter struct {
@@ -56,4 +58,24 @@ func (this *GetGSTimeRouter)Handle(request iface.IRpcRequest){
 	if onenet != nil{
 		onenet.CallChildNotForResult("GetGSTime", pid)
 	}
+}
+
+type BytesCalcRouter struct {
+	cluster.BaseRpcRouter
+}
+func (this *BytesCalcRouter)Handle(request iface.IRpcRequest){
+	data := (request.GetArgs()[0]).([]byte)
+	addcalc := &pb.AddCalc{}
+	err := proto.Unmarshal(data, addcalc)
+	if err != nil{
+		logger.Error("BytesCalcRouter Handle Err: ", err.Error())
+		return
+	}
+	addcalc.Result = addcalc.A + addcalc.B
+	bdata, err := proto.Marshal(addcalc)
+	if err != nil{
+		logger.Error(err.Error())
+		return
+	}
+	request.PushReturn("ret", bdata)
 }

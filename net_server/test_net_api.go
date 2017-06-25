@@ -88,3 +88,35 @@ func (this *Api11Router)Handle(request iface.IRequest){
 
 	}
 }
+
+/*
+测试[]byte数据
+*/
+type Api12Router struct {
+	fnet.BaseRouter
+}
+
+func (this *Api12Router)Handle(request iface.IRequest){
+	//test rpc for result
+	//转发到gate
+	onegate := clusterserver.GlobalClusterServer.RemoteNodesMgr.GetRandomChild("gate")
+
+	if onegate != nil{
+		data, err := onegate.CallChildForResult("BytesCalc", request.GetData())
+		if err != nil{
+			logger.Error("Api12Router Handle Err:", err.Error())
+			return
+		}
+		pid, _ := request.GetConnection().GetProperty("pid")
+		p := GlobalPlayerMgr.GetPlayer(pid.(int32))
+		if p != nil{
+			pdata := &pb.AddCalc{}
+			err = proto.Unmarshal(data.Result["ret"].([]byte), pdata)
+			if err != nil{
+				logger.Error(err.Error())
+				return
+			}
+			p.SendMsg(12, pdata)
+		}
+	}
+}

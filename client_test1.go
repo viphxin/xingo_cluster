@@ -12,7 +12,7 @@ import (
 	"os"
 	"os/signal"
 	"time"
-	"xingo_demo/pb"
+	"xingo_cluster/pb"
 )
 
 type PkgData struct {
@@ -35,6 +35,10 @@ func (this *MyPtotoc) OnConnectionMade(fconn iface.Iclient) {
 			this.Send(fconn, 0, msg)
 			this.Send(fconn, 10, nil)
 			this.Send(fconn, 11, nil)
+			this.Send(fconn, 12, &pb.AddCalc{
+				A: rand.Int31n(10),
+				B: rand.Int31n(10),
+			})
 			time.Sleep(2000 * time.Millisecond)
 		}
 	}()
@@ -105,6 +109,11 @@ func (this *MyPtotoc) DoMsg(fconn iface.Iclient, pdata *PkgData) {
 		proto.Unmarshal(pdata.Data, bdata)
 		println(bdata.GetContent())
 	}
+	if pdata.MsgId == 12{
+		bdata := &pb.AddCalc{}
+		proto.Unmarshal(pdata.Data, bdata)
+		println(fmt.Sprintf("=====%d+%d=%d", bdata.A, bdata.B,bdata.Result))
+	}
 }
 
 func (this *MyPtotoc) Send(fconn iface.Iclient, msgID uint32, data proto.Message) {
@@ -164,7 +173,7 @@ func (this *MyPtotoc) InitWorker(int32) {
 
 func main() {
 	nets := []int{11009}
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 1; i++ {
 		client := fnet.NewTcpClient("127.0.0.1", nets[rand.Intn(len(nets))], &MyPtotoc{})
 		client.Start()
 		time.Sleep(100 * time.Millisecond)
