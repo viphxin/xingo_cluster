@@ -11,7 +11,7 @@ type TestAdminRpc struct {
 }
 
 func (this *TestAdminRpc)GetGSTime(request *cluster.RpcRequest){
-	pid := (request.Rpcdata.Args[0]).(float64)
+	pid := (request.Rpcdata.Args[0]).(int32)
 	//转发到gate
 	onegate := clusterserver.GlobalClusterServer.RemoteNodesMgr.GetRandomChild("gate")
 

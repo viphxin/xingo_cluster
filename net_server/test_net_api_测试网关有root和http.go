@@ -57,7 +57,7 @@ func (this *TestNetApi2)Api_10(request *fnet.PkgAll){
 					Pid : pid.(int32),
 					Tp: 1,
 					Data: &pb.BroadCast_Content{
-						Content: fmt.Sprintf("%d + %d = %f", i, ii, response.Result["sum"].(float64)),
+						Content: fmt.Sprintf("%d + %d = %d", i, ii, response.Result["sum"].(int)),
 					},
 				}
 				p.SendMsg(10, msg)

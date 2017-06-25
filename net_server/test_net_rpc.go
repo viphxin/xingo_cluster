@@ -10,7 +10,7 @@ type TestNetRpc struct {
 }
 
 func (this *TestNetRpc)PushMsg2Client(request *cluster.RpcRequest){
-	pid := int32(request.Rpcdata.Args[0].(float64))
+	pid := request.Rpcdata.Args[0].(int32)
 	message := request.Rpcdata.Args[1].(string)
 	p := GlobalPlayerMgr.GetPlayer(pid)
 	if p != nil{
