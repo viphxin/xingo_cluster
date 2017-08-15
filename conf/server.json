@@ -5,5 +5,6 @@
 	"LogLevel": 2,
 	"MaxConn": 20000,
 	"LogPath": "/Users/huangxin/workspace/src/xingo_cluster/log",
-	"LogName": "cluster.log"
+	"LogName": "cluster.log",
+        "WriteList": ["127.0.0.1"]
 }
