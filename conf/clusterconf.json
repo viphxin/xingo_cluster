@@ -1,5 +1,5 @@
 {
-"master":{"host": "127.0.0.1","rootport":9999, "debugport":8881, "writelist": ["127.0.0.1"]},
+"master":{"host": "127.0.0.1","rootport":9999, "debugport":8881},
 "servers":{
 "gate1":{"host": "127.0.0.1", "rootport":10000,"name":"gate1", "module": "gate", "log": "gate.log"},
 "gate2":{"host": "127.0.0.1", "rootport":10001,"name":"gate2", "module": "gate", "log": "gate.log"},
